@@ -1,0 +1,13 @@
+gradio
+torch
+torchvision
+torchaudio
+numpy
+librosa
+soundfile
+pandas
+matplotlib
+seaborn
+scikit-learn
+tqdm
+jupyter

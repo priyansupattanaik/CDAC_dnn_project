@@ -8,6 +8,29 @@ ForestGuard is a deep learning-based audio classification system built with **Py
 
 ---
 
+## 🌐 Live Demo
+
+Try the project interactively without any local setup:
+
+| Resource | Link |
+|---|---|
+| **Live App (Hugging Face Space)** | [https://huggingface.co/spaces/priyansupattanaik/forestguard_CDAC-DNN-Project](https://huggingface.co/spaces/priyansupattanaik/forestguard_CDAC-DNN-Project) |
+| **Direct App URL** | [https://priyansupattanaik-forestguard-cdac-dnn-project.hf.space](https://priyansupattanaik-forestguard-cdac-dnn-project.hf.space) |
+| **GitHub Repository** | [https://github.com/priyansupattanaik/CDAC_dnn_project](https://github.com/priyansupattanaik/CDAC_dnn_project) |
+
+Upload a `.wav` file on the live demo and click **Analyze Audio** to get a Wildlife vs Threat prediction with confidence scores. The Space runs a **Gradio** app (`app.py`) using the same mel-spectrogram pipeline and `ForestGuardCNN` weights as the training notebook.
+
+> **Note:** If the Space shows as paused on Hugging Face, open the Space settings and click **Restart this Space** to bring the live app back online.
+
+### Run the demo locally
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+---
+
 ## 📊 Performance Summary
 
 | Metric | Value |
@@ -27,6 +50,8 @@ The confusion matrix on the validation set shows only **2 misclassifications** o
 ```
 forestguard/
 ├── forest.ipynb                 # Main notebook — full end-to-end pipeline
+├── app.py                       # Gradio live inference app (deployed on Hugging Face)
+├── requirements.txt             # Python dependencies
 ├── Neural_Network_Wildlife_Threat_Detection.png  # Architecture diagram
 ├── .gitattributes               # Git LFS tracking rules
 ├── README.md                    # This file
@@ -153,6 +178,14 @@ The utility scripts (`utils.py`, `utils2.py`, `bc_utils.py`) support:
 
 ## 🚀 Usage
 
+### Live Inference (Recommended)
+
+1. Open the [Hugging Face Live Demo](https://huggingface.co/spaces/priyansupattanaik/forestguard_CDAC-DNN-Project)
+2. Upload a WAV audio file
+3. Click **Analyze Audio** to view Wildlife/Threat probabilities and the final verdict
+
+Or run locally with `python app.py` after installing `requirements.txt`.
+
 ### Training from Scratch
 
 1. Ensure the ESC-50 dataset zip is placed in `dataset/raw/`
@@ -173,8 +206,8 @@ import torch
 import numpy as np
 import json
 
-# Load model architecture
-from forest import ForestGuardCNN  # or define the CNN class
+# Load model architecture (defined in app.py or forest.ipynb)
+from app import ForestGuardCNN
 
 model = ForestGuardCNN()
 model.load_state_dict(torch.load("models/forestguard_cnn.pt"))
@@ -211,8 +244,8 @@ git lfs install
 ## 🗓️ Future Development
 
 - **Modularize Pipeline**: Refactor the monolithic `forest.ipynb` into modular Python scripts for automated training, evaluation, and deployment.
-- **Inference Interface**: Build a lightweight CLI or Gradio/Streamlit web app for real-time audio classification.
-- **Environment Automation**: Create a `requirements.txt` or `environment.yml` for streamlined setup.
+- **Expand Live Demo**: Add batch upload, spectrogram visualization, and audio recording to the Hugging Face Space.
+- **Environment Automation**: Create an `environment.yml` for fully pinned reproducible setups.
 - **Extended Dataset**: Incorporate additional audio datasets beyond ESC-50 for improved robustness.
 
 ---

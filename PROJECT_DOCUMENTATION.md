@@ -34,9 +34,12 @@
 | **Model parameters** | 226,442 trainable (per notebook output); 226,927 total tensor elements in saved checkpoint |
 | **Best validation accuracy** | 97.22% (`0.9722`, early-stopped at epoch 23) |
 | **Deployment artifacts** | `models/forestguard_cnn.pt`, `models/label_map.json`, `models/norm_stats.npz` |
+| **Live demo (Hugging Face)** | [forestguard_CDAC-DNN-Project Space](https://huggingface.co/spaces/priyansupattanaik/forestguard_CDAC-DNN-Project) — Gradio app at `https://priyansupattanaik-forestguard-cdac-dnn-project.hf.space` |
+| **Inference app** | `app.py` — Gradio UI synced from Hugging Face Space (also loads artifacts from `models/`) |
+| **Dependencies** | `requirements.txt` |
 | **Auxiliary Python modules** | `dataset/bc_utils.py`, `dataset/utils.py`, `dataset/utils2.py` — present but **not imported** by `forest.ipynb` |
 
-There is **no** `requirements.txt`, `pyproject.toml`, `Dockerfile`, CI configuration, test suite, or `app.py` in the repository (despite `forest.ipynb` referencing `app.py`).
+There is **no** `pyproject.toml`, `Dockerfile`, CI configuration, or test suite in the repository.
 
 ---
 
@@ -47,7 +50,9 @@ There is **no** `requirements.txt`, `pyproject.toml`, `Dockerfile`, CI configura
 | Path | Type | Role | Referenced by |
 |---|---|---|---|
 | `forest.ipynb` | Jupyter notebook | End-to-end pipeline (setup → train → evaluate → export) | README |
-| `README.md` | Documentation | Project overview, setup instructions, architecture summary | — |
+| `app.py` | Gradio application | Live Wildlife/Threat inference UI | README, HF Space, `forest.ipynb` |
+| `requirements.txt` | Dependency manifest | `pip install` for app and notebook | README |
+| `README.md` | Documentation | Project overview, live demo link, setup instructions | — |
 | `Neural_Network_Wildlife_Threat_Detection.png` | Image (4.16 MB) | Architecture diagram embedded in README | README (`<img src=...>`) |
 | `.gitattributes` | Git config | Git LFS tracking rules | Git |
 
@@ -77,10 +82,20 @@ There is **no** `requirements.txt`, `pyproject.toml`, `Dockerfile`, CI configura
 | `models/label_map.json` | `{"0": "Wildlife", "1": "Threat"}` | `forest.ipynb`, README |
 | `models/norm_stats.npz` | `mean=-43.603737`, `std=18.599327` | `forest.ipynb` (cell 60), README |
 
-### 2.4 Files explicitly absent (searched, not found)
+### 2.4 External deployment (Hugging Face Space)
 
-- `app.py` (referenced in `forest.ipynb` markdown only)
-- `requirements.txt` / `environment.yml` (mentioned as future work in README)
+| Property | Value |
+|---|---|
+| **Space page** | https://huggingface.co/spaces/priyansupattanaik/forestguard_CDAC-DNN-Project |
+| **Direct app URL** | https://priyansupattanaik-forestguard-cdac-dnn-project.hf.space |
+| **SDK** | Gradio 5.34.2 |
+| **Entry file** | `app.py` |
+| **Space artifacts** | `forestguard_cnn.pt`, `label_map.json`, `norm_stats.npz` (at Space root) |
+| **Runtime status** | May show as **PAUSED** on Hugging Face free tier — restart from Space settings |
+
+### 2.5 Files explicitly absent (searched, not found)
+
+- `environment.yml` (mentioned as future work in README)
 - `setup.py` / `pyproject.toml`
 - Test files (`test_*.py`, `tests/`)
 - CI/CD configs (`.github/workflows/`, etc.)
@@ -565,8 +580,8 @@ Note: JSON keys are strings (`"0"`, `"1"`) after export; written from Python dic
 | Issue | Evidence | Impact |
 |---|---|---|
 | **`import copy` missing** | Training cell uses `copy.deepcopy(model.state_dict())` but setup cell has no `import copy` | `NameError` on fresh top-to-bottom notebook execution |
-| **`app.py` referenced but absent** | Markdown in Section 8 of notebook: "matches deployment model in `app.py`" | No deployment application exists in repo |
-| **`forest.py` referenced in README** | README inference example: `from forest import ForestGuardCNN` | Class only defined inside notebook |
+| **`forest.py` referenced historically** | Older README inference example used `from forest import ForestGuardCNN` | Class now available via `app.py` |
+| **HF Space may be paused** | Hugging Face API reports `runtime.stage: PAUSED` | Live demo URL requires Space restart on HF |
 | **README architecture drift** | README claims FC layer with 128 units; code uses `Linear(1536, 96)` | Documentation inaccuracy |
 | **README early stopping epoch** | README: epoch 18; notebook output: epoch 23 | Documentation inaccuracy |
 | **README conv block 3** | README lists MaxPool + Dropout in block 3; code uses `AdaptiveAvgPool2d(4,4)` with no third MaxPool/Dropout | Documentation inaccuracy |
